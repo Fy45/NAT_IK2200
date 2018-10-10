@@ -6,16 +6,16 @@ define(
 );
 
 AddressInfo(
-    left_interface     192.168.56.128     00:0c:29:64:de:a1,
-    right_interface    10.1.0.128     00:0c:29:64:de:ab
+    left_interface     192.168.102.128     00:0c:29:17:ec:a2,
+    right_interface    172.16.216.128     00:0c:29:17:ec:ac
 );
 
 // Module's I/O
 nicIn0  :: FromDPDKDevice($iface0, BURST $burst);
-nicOut0 :: ToDPDKDevice  ($iface0, IQUEUE $queueSize, BURST $burst);
+nicOut0 :: ToDPDKDevice  ($iface0, NDESC 512, IQUEUE $queueSize, BURST $burst);
 
 nicIn1  :: FromDPDKDevice($iface1, BURST $burst);
-nicOut1 :: ToDPDKDevice  ($iface1, IQUEUE $queueSize, BURST $burst);
+nicOut1 :: ToDPDKDevice  ($iface1, NDESC 512, IQUEUE $queueSize, BURST $burst);
 
 class_left :: Classifier(12/0806 20/0001,  //ARP query
                          12/0806 20/0002,  // ARP response
