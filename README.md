@@ -2,15 +2,15 @@
 
 In order to give a clearer view, I delete all the test configuration and only leave the working scripts. Also, if you want to see the development process you can go to the ReadME file for each task. The script outside all the folders is the one under development.
 
-Here is the README for [Task 1](https://gits-15.sys.kth.se/yfan/IK2200_NAT/blob/master/Script%20of%20Task%201/README.md)
+Here is the README for [Task 1](https://github.com/Fy45/NAT_IK2200/blob/master/Code/task1/README.md)
 
-README for [Task 2](https://gits-15.sys.kth.se/yfan/IK2200_NAT/tree/master/Script%20of%20Task%202)
+README for [Task 2](https://github.com/Fy45/NAT_IK2200/blob/master/Code/task2/README.md)
 
 ## Task 1 - Develop a single core NAT
 
 The configuration of single-core NAT is based on Click language and is run with FastClick. In order to fulfil the NAT, we need to realize functions by using Click Elements. The following Figure is a flowchart to show how the configuration finishes the NAT process.
 
-![Flowchart of Single-core NAT configuration](https://gits-15.sys.kth.se/yfan/IK2200_NAT/blob/master/Script%20of%20Task%201/Single-core%20NAT.jpg)
+![Flowchart of Single-core NAT configuration](https://github.com/Fy45/NAT_IK2200/blob/master/Code/task1/Single-core%20NAT.jpg)
 
 First, when the NAT machine received a packet, it needs to distinguish the type of the packet. If the packet is an ARP request, NAT will generate the response and send it to the corresponding interface. If the packet is an ARP response, then NAT will encapsulate ethernet header found via ARP into IP packets. If the packet is an IP packet, NAT will classify its type (TCP, UDP or ICMP) and send the packet into corresponding Rewriter Elements.
 
