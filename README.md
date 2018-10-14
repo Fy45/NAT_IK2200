@@ -1,51 +1,28 @@
 # NAT - Development of a multi-threaded NAT
 
-## 18-09-17
+In order to give a clearer view, I delete all the test configuration and only leave the working scripts. Also, if you want to see the development process you can go to the ReadME file for each task. The script outside all the folders is the one under development.
 
-This script contains the first try of sending a rewritten IP packet to the certain destination. Also, I want to return the ACK to the corresponding host. This edition will crush: Segmentation fault (core dumped)
+Here is the README for [Task 1](https://gits-15.sys.kth.se/yfan/IK2200_NAT/blob/master/Script%20of%20Task%201/README.md)
 
-Try to be familiar with the Rewriter element and Click the language
+README for [Task 2](https://gits-15.sys.kth.se/yfan/IK2200_NAT/tree/master/Script%20of%20Task%202)
 
-I will organize all the scripts into Test/date folders. The outside file will be the latest program which will be continually developed.
+## Task 1 - Develop a single core NAT
 
-\- Hongyi
+The configuration of single-core NAT is based on Click language and is run with FastClick. In order to fulfil the NAT, we need to realize functions by using Click Elements. The following Figure is a flowchart to show how the configuration finishes the NAT process.
 
-## 18-09-18
+![Flowchart of Single-core NAT configuration](https://gits-15.sys.kth.se/yfan/IK2200_NAT/blob/master/Script%20of%20Task%201/Single-core%20NAT.jpg)
 
-Single-NAT-v2.click solve the core dump problem. We need to avoid using two patterns with the same input, which will cause an empty point problem. But the script still has some of the problems since I didn’t add arp request and reply on Click router. All the information coming to the internal interface is ARP-Requesting. 
+First, when the NAT machine received a packet, it needs to distinguish the type of the packet. If the packet is an ARP request, NAT will generate the response and send it to the corresponding interface. If the packet is an ARP response, then NAT will encapsulate ethernet header found via ARP into IP packets. If the packet is an IP packet, NAT will classify its type (TCP, UDP or ICMP) and send the packet into corresponding Rewriter Elements.
 
-I wrote a new program contain all the function. The reference code is mazu-nat.click and thomer-nat.click. But there’s still some problem. It seems that I shouldn’t reuse the ToDevice and FromDevice element with the same interface. I will figure out the solution tomorrow.
+It is really similar for TCPRewriter, UDPRewriter, ICMPRewriter, and ICMPPingRewriter elements. The parameter that they use, is from IPRewriterPatterns, which specify the new source IP address and source port. After all of these finished, NAT will broadcast the ARP query to request the Ethernet address of destination machine and send out the rewritten packet.
 
-\- Hongyi
+## Task 2 - Develop a multi-thread NAT
 
-## 18-09-20
+### Per-core duplication, with software classification
 
-Reused device problem solved. I shouldn’t put the Queue element in the todevice element class. After I move it out, Queue's push input port can be reused. Until now, I have finished creating the configuration to translate UDP and TCP flow. Tomorrow we will add DPDK device and maybe the ICMP protocl into the configuration and test if there is any error.
+Really similar to the previous task, but what we need to add is to using CPUSwitch element in order to duplicate the process of NAT function. When a packet comes back, we need to send it to a corresponding Rewrite flow table based on its destination port.
 
-You can see the configurations in file Single_core_NAT_without_DPDK.click.
+You can see the whole configuration in 2-core-NAT.click and 4-core-NAT.click. I will update the explanation for the script.
 
-\-Hongyi & Lida
+To be continued....
 
-## 18-09-21
-
-Finishing configuring NAT with DPDK device. At next stage we will test this NAT to prove the bottleneck performance.
-
-\-Hongyi
-
-## 18-09-22
-
-Adding ICMP echo and echo reply. Maybe the click element document could add some more specific example for parameters. For this example, ICMPPingRewriter has the same input parameters as IPRewriter. Next few days we will add the rest ICMP protocol rewriter to finish all the NAT function.
-
-\-Hongyi & Lida
-
-## 18-09-23
-
-Adding ICMP Rewriter. Until now, we finished all NAT function.
-
-\-Lida
-
-## 18-09-28
-
-Upload DPDK-Forwarding.click. This file is used to test original performance by only forwarding packets without NAT function
-
-\- Hongyi
